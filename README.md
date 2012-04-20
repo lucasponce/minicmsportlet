@@ -27,7 +27,9 @@ minicmsportlet uses JBoss Cache for internal repository with clustering cappabil
 
 minicmsportlet has been tested with JBoss Enterprise Portal Platform 5.2 based on GateIn with "all" type instance.
 
-You can get JBoss EPP 5.2 from here:	https://access.redhat.com/downloads/evals
+You can get JBoss EPP 5.2 from here:	
+
+	https://access.redhat.com/downloads/evals
 
 Installation
 ------------
@@ -44,7 +46,9 @@ Configuration
 
 minicmsportlet uses JBoss Cache as repository, and it's configured into the following path minicmsportlet.war/WEB-INF/minicms-jboss-beans.xml.
 
-JBoss Cache is configured to use a local folder as cache loader, this folder can be configured with a java system property-Dminicms.data.dir=/tmp.
+JBoss Cache is configured to use a local folder as cache loader, this folder can be configured with a java system property 
+
+	-Dminicms.data.dir=<path to your folder repository>
 
 minicmsportlet is a really simple piece of code, you can easily adapt it to your needs.
 
