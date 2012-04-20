@@ -1,4 +1,4 @@
-<project name="minicmslib" basedir=".">
+<project name="minicmslib" basedir="." default="archive">
 	
 	<!-- Folders -->
 	<property name="bin" value="${basedir}/bin" />
