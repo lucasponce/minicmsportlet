@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<deployment xmlns="urn:jboss:bean-deployer:2.0">
+
+   <!-- First we create a Configuration object for the cache -->
+   <bean name="MiniCMSCacheConfig"
+   		 class="org.jboss.cache.config.Configuration">
+      
+      <!-- Externally injected services -->  
+      <property name="runtimeConfig">
+         <bean class="org.jboss.cache.config.RuntimeConfig">
+            <property name="transactionManager">
+               <inject bean="jboss:service=TransactionManager" 
+                       property="TransactionManager"/>
+            </property>
+            <property name="muxChannelFactory"><inject bean="JChannelFactory"/></property>
+         </bean>
+      </property>
+      
+      <property name="multiplexerStack">udp</property>
+
+      <property name="clusterName">MiniCMSCache</property>
+        
+      <property name="isolationLevel">REPEATABLE_READ</property>
+
+      <property name="cacheMode">REPL_SYNC</property>
+
+      <property name="stateRetrievalTimeout">15000</property>
+
+      <property name="syncReplTimeout">20000</property>
+
+      <property name="lockAcquisitionTimeout">15000</property>
+        
+      <property name="exposeManagementStatistics">true</property>
+
+      <!-- Buddy Replication -->
+      <property name="buddyReplicationConfig">
+	   	<bean class="org.jboss.cache.config.BuddyReplicationConfig">
+	               
+	      		<property name="enabled">false</property>
+	               
+	      		<property name="buddyPoolName">default</property>
+	               
+	      		<property name="buddyCommunicationTimeout">17500</property>
+	               
+	      		<property name="autoDataGravitation">true</property>
+	      		<property name="dataGravitationRemoveOnFind">true</property>
+	      		<property name="dataGravitationSearchBackupTrees">true</property>
+	               
+	      		<property name="buddyLocatorConfig">
+	         		<bean class="org.jboss.cache.buddyreplication.NextMemberBuddyLocatorConfig">
+	            		<property name="numBuddies">1</property>
+	            		<property name="ignoreColocatedBuddies">false</property>
+	          		</bean>
+	      		</property>
+	   	  </bean>
+        </property>
+        
+        <!-- Loaders -->
+		<property name="cacheLoaderConfig">
+			<bean class="org.jboss.cache.config.CacheLoaderConfig">
+				<property name="passivation">false</property>
+				<property name="shared">false</property>
+				<property name="individualCacheLoaderConfigs">
+					<list>
+						<bean class="org.jboss.cache.loader.FileCacheLoaderConfig">
+							<property name="location">${minicms.data.dir:/tmp}/minicms</property>
+						</bean>
+					</list>					
+				</property>
+			</bean>
+		</property>
+	
+   </bean>
+   
+   <!-- Factory to build the Cache. -->
+   <bean name="MiniCMSCacheFactory" class="org.jboss.cache.DefaultCacheFactory">      
+      <constructor factoryClass="org.jboss.cache.DefaultCacheFactory"
+                   factoryMethod="getInstance" />
+   </bean>
+   
+   <!-- The cache itself -->
+   <bean name="MiniCMSCache" class="org.jboss.cache.Cache">
+      
+      <constructor factoryMethod="createCache">
+          <factory bean="MiniCMSCacheFactory"/>
+          <parameter class="org.jboss.cache.config.Configuration"><inject bean="MiniCMSCacheConfig"/></parameter>
+          <parameter class="boolean">false</parameter>
+      </constructor>
+          
+   </bean>
+
+   <bean name="MiniCMSCacheJmxWrapper" class="org.jboss.cache.jmx.CacheJmxWrapper">
+      
+      <annotation>@org.jboss.aop.microcontainer.aspects.jmx.JMX(name="jboss.cache:service=MiniCMSCache",                      exposedInterface=org.jboss.cache.jmx.CacheJmxWrapperMBean.class, registerDirectly=true)</annotation>
+      
+      <constructor>
+          <parameter><inject bean="MiniCMSCache"/></parameter>
+      </constructor>
+          
+   </bean>
+
+
+</deployment>

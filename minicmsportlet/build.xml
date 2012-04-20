@@ -1,0 +1,75 @@
+<project name="minicmsportlet" basedir="." default="war">
+	
+    	<!-- Properties -->
+    	<property file="../build.properties" />		
+
+	<!-- Folders -->
+	<property name="classes" value="${basedir}/WebContent/WEB-INF/classes" />
+	<property name="src" value="${basedir}/src" />
+		
+	<!-- Classpath -->	
+	<path id="build.classpath">
+		<!-- minicmslib -->
+		<fileset dir="../minicmslib">
+			<include name="minicmslib.jar" />
+		</fileset>
+		<!-- Client -->
+		<fileset dir="${jboss.epp.home}/jboss-as/client">
+			<include name="*.jar" />
+		</fileset>
+		<!-- Servlet -->
+		<fileset dir="${jboss.epp.home}/jboss-as/common/lib">
+			<include name="servlet-api.jar" />
+		</fileset>
+		<!-- Portlet -->
+		<fileset dir="${jboss.epp.home}/jboss-as/server/${jboss.epp.instance}/deploy/gatein.ear/lib">
+			<include name="portlet-api-2.0.jar" />
+		</fileset>
+		<!-- JBoss Cache -->
+		<fileset dir="${jboss.epp.home}/jboss-as/server/${jboss.epp.instance}/lib">
+			<include name="jbosscache-core.jar" />
+		</fileset>
+		<!-- WEB-INF/lib -->
+		<fileset dir="${basedir}/WebContent/WEB-INF/lib">
+			<include name="*.jar" />
+		</fileset>
+
+	</path>	
+	
+	<!-- Targets -->
+	<target name="minicmslib">
+		<ant antfile="../minicmslib/build.xml" inheritAll="false" target="archive" />
+	</target>
+
+	<target name="clean"
+		description="Clean project">
+
+		<delete dir="${classes}" />
+		<delete dir="${basedir}/${ant.project.name}.war" />
+
+	</target>
+
+	<target name="compile" depends="clean,minicmslib"
+		description="Compile project against JBoss EPP libs. Set up jboss.epp.home and jboss.epp.instance in build.properties file.">
+	
+		<echo message="Compiling minicmsportlet" />
+		<mkdir dir="${classes}" />
+		<javac classpathref="build.classpath" destdir="${classes}" includeantruntime="false" >
+			<src path="${src}" />
+		</javac>
+
+		<!-- Copy resources files -->
+		<copy todir="${classes}">
+			<fileset dir="${src}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+
+	</target>
+	
+	<target name="war" depends="compile"
+		description="Build a packaged .esb archive.">
+		<jar jarfile="${basedir}/${ant.project.name}.war" basedir="${basedir}/WebContent" />
+	</target>
+	
+</project>

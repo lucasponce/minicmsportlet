@@ -1,0 +1,48 @@
+.rightLink 		{	
+					background-color: #F0F0F0;
+					text-align: right;
+					font-size: 14px;
+				}
+.centerContent 	{	
+					text-align: center;
+					background-color: #F0F0F0;
+					font-size: 14px;
+			    }
+.centerContent2 	
+				{	
+					text-align: center;
+					font-size: 14px;
+			    }
+.leftContent 	{	
+					text-align: left;
+					background-color: #F0F0F0;
+					font-size: 14px;
+}
+.centerTable table   
+				{
+					width: 100px;
+					text-align: center;
+					font-size: 14px;
+    				/* margin-left:20%; */ 
+    				/* margin-right:20%; */					
+				}
+
+.centerTable th {
+					background-color: #848484;
+					color: white;
+					font-size: 14px;
+				}
+.tdImage 	  	{
+					background-color: #F0F0F0;
+					text-align: center;
+					font-size: 14px;
+					width: 90%;	
+				}				
+.tdLink 	  	{
+					font-size: 14px;	
+				}				
+.validation		{
+					color: red;
+					font-size: 14px;	
+					text-align: center;	
+				}

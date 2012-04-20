@@ -19,7 +19,7 @@
 	
 		<echo message="Compiling minicmslib library" />
 		<mkdir dir="${bin}" />
-		<javac destdir="${bin}" nowarn="on" >
+		<javac destdir="${bin}" includeantruntime="off" >
 			<src path="${src}" />
 		</javac>
 
