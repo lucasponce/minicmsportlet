@@ -45,7 +45,7 @@
 		description="Clean project">
 
 		<delete dir="${classes}" />
-		<delete dir="${basedir}/${ant.project.name}.war" />
+		<delete file="${basedir}/${ant.project.name}.war" />
 
 	</target>
 
