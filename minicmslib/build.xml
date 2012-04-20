@@ -1,0 +1,35 @@
+<project name="minicmslib" basedir=".">
+	
+	<!-- Folders -->
+	<property name="bin" value="${basedir}/bin" />
+	<property name="src" value="${basedir}/src" />
+		
+	
+	<!-- Targets -->
+	<target name="clean"
+		description="Clean project">
+
+		<delete dir="${bin}" />
+		<delete file="${basedir}/${ant.project.name}.jar" />
+
+	</target>
+
+	<target name="compile" depends="clean"
+		description="Compile minicmslib library">
+	
+		<echo message="Compiling minicmslib library" />
+		<mkdir dir="${bin}" />
+		<javac destdir="${bin}" nowarn="on" >
+			<src path="${src}" />
+		</javac>
+
+	</target>
+
+	<target name="archive" depends="compile"
+		description="Create minicmslib.jar">
+
+		<jar jarfile="${basedir}/${ant.project.name}.jar" basedir="${basedir}/bin" />
+
+	</target>
+		
+</project>
