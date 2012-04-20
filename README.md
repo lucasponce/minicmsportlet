@@ -10,7 +10,11 @@ Objectives
 
 minicmsportlet is a set of java portlets (based on JSR 168) to offer minimal functionalities of Web Content Management for java portals.
 
-minicmsportlet supports multilanguage content, internal resources repository, in-line editing and clustering cappabilities.
+minicmsportlet supports 
+
+- multilanguage content, 
+- internal resources repository, 
+- in-line editing and clustering cappabilities.
 
 Portlets description:
 
