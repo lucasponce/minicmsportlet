@@ -14,7 +14,8 @@ minicmsportlet supports
 
 - multilanguage content, 
 - internal resources repository, 
-- in-line editing and clustering cappabilities.
+- in-line editing and 
+- clustering cappabilities.
 
 Portlets description:
 
