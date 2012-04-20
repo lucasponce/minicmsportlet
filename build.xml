@@ -1,0 +1,34 @@
+<project name="minicmsportlet" basedir="." default="install">
+
+    	<!-- Properties -->
+    	<property file="build.properties" />	
+
+	<!-- Targets -->
+	<target name="clean">
+
+		<ant antfile="minicmslib/build.xml" inheritAll="false" target="clean" />
+		<ant antfile="minicmsportlet/build.xml" inheritAll="false" target="clean" />
+
+	</target>	
+
+	<target name="build" depends="clean">
+
+		<ant antfile="minicmsportlet/build.xml" inheritAll="false" target="war" />
+
+	</target>
+
+	<target name="install" depends="build">
+		
+		<copy file="minicmslib/minicmslib.jar" todir="${jboss.epp.home}/jboss-as/${jboss.epp.instance}/lib" />
+		<copy file="minicmsportlet/minicmsportlet.war" todir="${jboss.epp.home}/jboss-as/${jboss.epp.instance}/deploy" />
+	
+	</target>
+
+	<target name="uninstall">
+
+		<delete file="${jboss.epp.home}/jboss-as/${jboss.epp.instance}/lib/minicmslib.jar" />
+		<delete file="${jboss.epp.home}/jboss-as/${jboss.epp.instance}/deploy/minicmsportlet.war" />
+
+	</target>
+
+</project>
