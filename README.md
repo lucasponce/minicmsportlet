@@ -32,10 +32,12 @@ You can get JBoss EPP 5.2 from here:	https://access.redhat.com/downloads/evals
 Installation
 ------------
 
-[1]	Update build.properties with the path of your jboss-epp-5.2 home and with your "all" based instance name.
-[2]	ant install to compile and deploy minicmslib.jar into $INSTANCE/lib folder and minicmsportlet.war into $INSTANCE/deploy folder.
-[3]	Start your instance
-[4]	Take a look into minitutorial about how to create new portal pages with MinimalCMS portlets and start editing web content.
+Steps:
+
+	- [1]	Update build.properties with the path of your jboss-epp-5.2 home and with your "all" based instance name.
+	- [2]	ant install to compile and deploy minicmslib.jar into $INSTANCE/lib folder and minicmsportlet.war into $INSTANCE/deploy folder.
+	- [3]	Start your instance
+	- [4]	Take a look into minitutorial about how to create new portal pages with MinimalCMS portlets and start editing web content.
 
 Configuration
 -------------
@@ -48,10 +50,15 @@ minicmsportlet is a really simple piece of code, you can easily adapt it to your
 
 JBoss Cache is not mandatory, you can rewrite your own repository just adding an implementation of the following interfaces:
 
-- content.ContentAPI
-- images.ImagesAPI
+	- content.ContentAPI
+	- images.ImagesAPI
 
-You can take content.CacheContentImpl and images.CacheImagesImpl as examples of implementations but the aim of this design is to add different implementations in a simple way.
+You can take:
+
+	- content.CacheContentImpl and 
+	- images.CacheImagesImpl 
+
+as examples of implementations but the aim of this design is to add different implementations in a simple way.
 
 Tutorial
 --------
