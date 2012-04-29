@@ -19,15 +19,15 @@
 
 	<target name="install" depends="build">
 		
-		<copy file="minicmslib/minicmslib.jar" todir="${jboss.epp.home}/jboss-as/${jboss.epp.instance}/lib" />
-		<copy file="minicmsportlet/minicmsportlet.war" todir="${jboss.epp.home}/jboss-as/${jboss.epp.instance}/deploy" />
+		<copy file="minicmslib/minicmslib.jar" todir="${jboss.epp.home}/jboss-as/server/${jboss.epp.instance}/lib" />
+		<copy file="minicmsportlet/minicmsportlet.war" todir="${jboss.epp.home}/jboss-as/server/${jboss.epp.instance}/deploy" />
 	
 	</target>
 
 	<target name="uninstall">
 
-		<delete file="${jboss.epp.home}/jboss-as/${jboss.epp.instance}/lib/minicmslib.jar" />
-		<delete file="${jboss.epp.home}/jboss-as/${jboss.epp.instance}/deploy/minicmsportlet.war" />
+		<delete file="${jboss.epp.home}/jboss-as/server/${jboss.epp.instance}/lib/minicmslib.jar" />
+		<delete file="${jboss.epp.home}/jboss-as/server/${jboss.epp.instance}/deploy/minicmsportlet.war" />
 
 	</target>
 
