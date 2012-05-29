@@ -24,6 +24,9 @@
 		<!-- Portlet -->
 		<fileset dir="${jboss.epp.home}/jboss-as/server/${jboss.epp.instance}/deploy/gatein.ear/lib">
 			<include name="portlet-api-2.0.jar" />
+			<include name="exo.core.component.organization.api*jar" />
+			<include name="exo.kernel.container*.jar" />
+			<include name="picocontainer*.jar" />
 		</fileset>
 		<!-- JBoss Cache -->
 		<fileset dir="${jboss.epp.home}/jboss-as/server/${jboss.epp.instance}/lib">

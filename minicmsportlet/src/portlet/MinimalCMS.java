@@ -16,6 +16,10 @@ import org.apache.log4j.Logger;
 import content.ContentAPI;
 import content.ContentFactory;
 
+import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.organization.Group;
+
 public class MinimalCMS extends GenericPortlet {
 
 	protected final static Logger _log = Logger.getLogger(MinimalCMS.class);
@@ -32,7 +36,7 @@ public class MinimalCMS extends GenericPortlet {
 		// Accessing to Portlet preferences
 		
 		PortletPreferences prefs = request.getPreferences();
-		String edit = prefs.getValue("edit_user", "none"); 
+		String edit = prefs.getValue("edit_role", "none"); 
 		String key = prefs.getValue("content_key", "default");
 		String locale = request.getLocale().getLanguage();
 
@@ -56,10 +60,24 @@ public class MinimalCMS extends GenericPortlet {
 
 		// Checking admin user: view with edit link
 		
+		OrganizationService os = (OrganizationService)PortalContainer
+					.getInstance()
+					.getComponentInstanceOfType(OrganizationService.class);	
+
 		if (request.getUserPrincipal() != null &&
-			request.getUserPrincipal().getName() != null &&
-			request.getUserPrincipal().getName().equals(edit)) {
-			view = "/jsp/viewadmin.jsp";
+		    request.getUserPrincipal().getName() != null) {
+		
+		    try {
+			    for (Object o : os.getGroupHandler().findGroupsOfUser(request.getRemoteUser())){						
+				Group g = (Group)o;						
+				if (g.getGroupName().equals(edit)) {
+					view = "/jsp/viewadmin.jsp";
+					break;		        
+				}
+			    }	
+		    } catch (Exception e) {
+			_log.error("Error accesing to Organization API");			
+		    }		
 		}
 
 		// Forward to edit view
@@ -87,7 +105,7 @@ public class MinimalCMS extends GenericPortlet {
 	@Override
 	public void processAction(ActionRequest request, ActionResponse response)
 			throws PortletException, IOException {
-
+	
 		_log.debug("ACTION");
 		
 		// Accesing form params
@@ -95,8 +113,18 @@ public class MinimalCMS extends GenericPortlet {
 		String edit_view = request.getParameter("edit_view");		
 		if (edit_view == null) edit_view = "";
 				
-		// edit_view = new String(edit_view.getBytes("8859_1"),"UTF8");
-		edit_view = new String(edit_view.getBytes("UTF8"),"UTF8");		
+		// Encoding parameters
+
+		String IN_ENCODING = "UTF8";
+		String OUT_ENCODING = "UTF8";
+
+		if (System.getProperty("minicms.in.encoding") != null)
+			IN_ENCODING = System.getProperty("minicms.in.encoding");
+
+		if (System.getProperty("minicms.out.encoding") != null)
+			OUT_ENCODING = System.getProperty("minicms.out.encoding");
+
+		edit_view = new String(edit_view.getBytes(IN_ENCODING),OUT_ENCODING);		
 
 		_log.debug("edit_view: " + edit_view);
 		

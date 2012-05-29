@@ -16,8 +16,8 @@
 		</portlet-info>
 		<portlet-preferences>
 			<preference>
-				<name>edit_user</name>
-				<value>root</value>
+				<name>edit_role</name>
+				<value>administrators</value>
 			</preference>
 			<preference>
 				<name>content_key</name>
