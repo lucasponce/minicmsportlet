@@ -95,8 +95,9 @@ public class MinimalCMS extends GenericPortlet {
 		String edit_view = request.getParameter("edit_view");		
 		if (edit_view == null) edit_view = "";
 				
-		edit_view = new String(edit_view.getBytes("8859_1"),"UTF8");
-		
+		// edit_view = new String(edit_view.getBytes("8859_1"),"UTF8");
+		edit_view = new String(edit_view.getBytes("UTF8"),"UTF8");		
+
 		_log.debug("edit_view: " + edit_view);
 		
 		// Replacing repo: shorcuts for internal images
