@@ -91,6 +91,7 @@ Release
 
 - 29th May 2012. Adding roles for editor users, instead to access via user name.
 - 29th May 2012. Adding encoding as a system parameters
+- 2nd Dec 2012. Adding new branch for sites fine granularity.
 
 
 
