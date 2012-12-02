@@ -33,11 +33,12 @@ public class ImageCMS extends HttpServlet {
 
 		// Get key parameter of the object
 		String key = request.getParameter("key");
+		String site = request.getParameter("site");
 		
 		// Access to Images repository
 		ImagesAPI images = ImagesFactory.getImages();
 		
-		Image image = images.getImage(key);
+		Image image = images.getImage(key,site);
 		
 		if (image != null) {
 			

@@ -9,4 +9,10 @@ public interface ContentAPI {
 	List<Content> getContent();
 	void removeContent(String key, String locale);
 	
+	//Modificación del 
+	String getContent(String key, String locale,String site);
+	void setContent(String key, String locale, String content, String site);
+	List<Content> getContent(String site);
+	void removeContent(String key, String locale, String site);
+	
 }

@@ -5,6 +5,7 @@ import images.ImagesFactory;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.portlet.ActionRequest;
@@ -25,19 +26,23 @@ import org.apache.log4j.Logger;
 public class ImagesCMS extends GenericPortlet {
 
 	protected final static Logger _log = Logger.getLogger(ImagesCMS.class);
-
+	private String site;
+	
 	@Override
 	protected void doView(RenderRequest request, RenderResponse response)
 			throws PortletException, IOException {
 
 		_log.debug("VIEW");
 		
+		site = this.getSite(request);
+		
 		// Access Images repository
 		
 		ImagesAPI images = ImagesFactory.getImages();
-		Set<String> list = images.getImages();
+		Set<String> list = images.getImages(site);
 		
 		request.setAttribute("listimages", list);
+		request.setAttribute("site", site);
 
 		// Accessing to Portlet session
 		
@@ -60,6 +65,8 @@ public class ImagesCMS extends GenericPortlet {
 
 		_log.debug("ACTION");	
 		
+		site = this.getSite(request);
+		
 		// Validation messages
 		String validation = "";
 		
@@ -67,7 +74,7 @@ public class ImagesCMS extends GenericPortlet {
 		
 		if (deleteimage != null) {
 			ImagesAPI images = ImagesFactory.getImages();
-			images.removeImage(deleteimage);						
+			images.removeImage(deleteimage,site);						
 			return;
 		}
 		
@@ -123,7 +130,7 @@ public class ImagesCMS extends GenericPortlet {
 			// Validation if exists
 			boolean exists = false;
 			ImagesAPI images = ImagesFactory.getImages();
-			if (images.getImage(key) != null) {
+			if (images.getImage(key,site) != null) {
 				exists = true;
 				validation = "Image key: " + key + " has already uploaded. Please, delete it prior re-upload it.";
 			}
@@ -134,7 +141,7 @@ public class ImagesCMS extends GenericPortlet {
 				image != null && 
 				!exists) {
 				images = ImagesFactory.getImages();
-				images.setImage(key, image);
+				images.setImage(key, image,site);
 			}
 			
 			request.getPortletSession().setAttribute("validation", validation);
@@ -148,5 +155,27 @@ public class ImagesCMS extends GenericPortlet {
 		}
 		
 	}
-
+	
+	// Methods for getting site
+		private String getSite (RenderRequest request) {
+			for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet())
+		      {
+		    	  
+		    	 if (entry.getKey().equals("site_name"))
+		    		 site=entry.getValue()[0];
+		      }
+			System.out.println("site content render:"+site);
+			return site;
+		}
+		private String getSite (ActionRequest request) {
+			for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet())
+		      {
+		    	  
+		    	 if (entry.getKey().equals("site_name"))
+		    		 site=entry.getValue()[0];
+		      }
+			System.out.println("site content action:"+site);
+			return site;
+		}
+		
 }

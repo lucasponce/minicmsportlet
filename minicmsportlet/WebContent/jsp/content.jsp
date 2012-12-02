@@ -28,7 +28,7 @@
 				</portlet:actionURL>'
 				onclick="return confirm('Confirm delete ${content.key}_${content.locale} content');"
 				>Delete</a></td>
-				<td class="tdImage"><a href="/minicmsportlet/content?key=${content.key}_${content.locale}" target="_blank">View&nbsp;&nbsp;</a></td>
+				<td class="tdImage"><a href="/minicmsportlet/content?key=${content.key}_${content.locale}&site=${site}" target="_blank">View&nbsp;&nbsp;</a></td>
 			</tr>
 		</c:forEach>
 	</table>	

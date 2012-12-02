@@ -27,7 +27,7 @@
 				</portlet:actionURL>'
 				onclick="return confirm('Confirm delete ${image} image');"
 				>Delete</a></td>
-				<td class="tdImage"><a href="/minicmsportlet/image?key=${image}" target="_blank">View&nbsp;&nbsp;</a></td>
+				<td class="tdImage"><a href="/minicmsportlet/image?key=${image}&site=${site}" target="_blank">View&nbsp;&nbsp;</a></td>
 			</tr>
 		</c:forEach>
 	</table>	

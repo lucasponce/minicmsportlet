@@ -30,6 +30,7 @@ public class ContentCMS extends HttpServlet {
 
 		// Get key parameter of the object
 		String key = request.getParameter("key");
+		String site = request.getParameter("site");
 		
 		// Access to Content repository
 		
@@ -38,7 +39,7 @@ public class ContentCMS extends HttpServlet {
 		String keystr = key.split("_")[0];
 		String localestr = key.split("_")[1];
 
-		String content = contents.getContent(keystr, localestr);
+		String content = contents.getContent(keystr, localestr,site);
 		
 		if (content != null) {
 			

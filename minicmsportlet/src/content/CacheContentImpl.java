@@ -21,12 +21,14 @@ public class CacheContentImpl implements ContentAPI {
 	public final String CACHE_NAME="jboss.cache:service=MiniCMSCache";
 	
 	private static final Logger log = Logger.getLogger(CacheContentImpl.class);
+
+	// Methods without site
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public String getContent(String key, String locale) {
 		checkCache();
 		if (contentCache != null) {
-			String fqnstr = "/content/" + key + "/" + locale;
+			String fqnstr = "/defaultsite/nosite/content/" + key + "/" + locale;
 			Fqn fqn = Fqn.fromString(fqnstr);
 			String content = (String)contentCache.get(fqn, key);
 			return content;
@@ -38,7 +40,7 @@ public class CacheContentImpl implements ContentAPI {
 	public void setContent(String key, String locale, String content) {
 		checkCache();
 		if (contentCache != null) {
-			String fqnstr = "/content/" + key + "/" + locale;
+			String fqnstr = "/defaultsite/content/" + key + "/" + locale;
 			Fqn fqn = Fqn.fromString(fqnstr);
 			contentCache.put(fqn, key, content);			
 		}
@@ -53,10 +55,10 @@ public class CacheContentImpl implements ContentAPI {
 			
 			ArrayList<Content> aContent = new ArrayList<Content>();
 			
-			String fqnstr = "/content";
+			String fqnstr = "/defaultsite/content";
 			Fqn fqn = Fqn.fromString(fqnstr);
 			for (String key : (Set<String>)contentCache.getChildrenNames(fqn)) {
-				String fqnchildstr = "/content/" + key;
+				String fqnchildstr = "/defaultsite/content/" + key;
 				Fqn fqnchild = Fqn.fromString(fqnchildstr);
 				for (String locale : (Set<String>)contentCache.getChildrenNames(fqnchild)) {
 					Content content = new Content();
@@ -64,7 +66,7 @@ public class CacheContentImpl implements ContentAPI {
 					
 					content.setKey(key);
 					content.setLocale(locale);
-					String fqncontentstr = "/content/" + key + "/" + locale;
+					String fqncontentstr = "/defaultsite/content/" + key + "/" + locale;
 					Fqn fqncontent = Fqn.fromString(fqncontentstr);
 					content.setContent((String)contentCache.get(fqncontent, key));
 				}
@@ -79,13 +81,80 @@ public class CacheContentImpl implements ContentAPI {
 	public void removeContent(String key, String locale) {
 		checkCache();
 		if (contentCache != null) {
-			String fqnstr = "/content/" + key + "/" + locale;
+			String fqnstr = "/defaultsite/content/" + key + "/" + locale;
 			Fqn fqn = Fqn.fromString(fqnstr);
 			contentCache.remove(fqn, key);
 			contentCache.removeNode(fqn);
 		}		
 	}
+    
+	//New Methods for storing content per site
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public String getContent(String key, String locale, String site) {
+		checkCache();
+		if (contentCache != null) {
+			String fqnstr = "/"+site+"/content/" + key + "/" + locale;
+			Fqn fqn = Fqn.fromString(fqnstr);
+			String content = (String)contentCache.get(fqn, key);
+			return content;
+		}
+		return null;
+	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void setContent(String key, String locale, String content, String site) {
+		checkCache();
+		if (contentCache != null) {
+			String fqnstr = "/"+site+"/content/" + key + "/" + locale;
+			Fqn fqn = Fqn.fromString(fqnstr);
+			contentCache.put(fqn, key, content);			
+		}
+	}
+	
+	
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public List<Content> getContent(String site) {
+		checkCache();
+		if (contentCache != null) {
+			
+			ArrayList<Content> aContent = new ArrayList<Content>();
+			
+			String fqnstr = "/"+site+"/content";
+			Fqn fqn = Fqn.fromString(fqnstr);
+			for (String key : (Set<String>)contentCache.getChildrenNames(fqn)) {
+				String fqnchildstr = "/"+site+"/content/" + key;
+				Fqn fqnchild = Fqn.fromString(fqnchildstr);
+				for (String locale : (Set<String>)contentCache.getChildrenNames(fqnchild)) {
+					Content content = new Content();
+					aContent.add(content);
+					
+					content.setKey(key);
+					content.setLocale(locale);
+					String fqncontentstr = "/"+site+"/content/" + key + "/" + locale;
+					Fqn fqncontent = Fqn.fromString(fqncontentstr);
+					content.setContent((String)contentCache.get(fqncontent, key));
+				}
+			}
+			
+			return aContent;
+		}
+		return null;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void removeContent(String key, String locale,String site) {
+		checkCache();
+		if (contentCache != null) {
+			String fqnstr = "/"+site+"/content/" + key + "/" + locale;
+			Fqn fqn = Fqn.fromString(fqnstr);
+			contentCache.remove(fqn, key);
+			contentCache.removeNode(fqn);
+		}		
+	}
+    
+	// end New Methods for storing content per site
+	 
 	@SuppressWarnings("rawtypes")
 	private void checkCache()  {
 		if (contentCache == null) {

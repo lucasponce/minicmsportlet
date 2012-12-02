@@ -1,6 +1,8 @@
 package portlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -26,13 +28,17 @@ public class MinimalCMS extends GenericPortlet {
 
 	final String REPO = "repo:";
 	final String INTERNAL_URL = "/minicmsportlet/image?key=";
+	private String site;
+	
 	
 	@Override
 	protected void doView(RenderRequest request, RenderResponse response)
 			throws PortletException, IOException {
 		
 		_log.debug("VIEW");
-
+		
+		site = this.getSite(request);
+		
 		// Accessing to Portlet preferences
 		
 		PortletPreferences prefs = request.getPreferences();
@@ -47,7 +53,7 @@ public class MinimalCMS extends GenericPortlet {
 		// Accessing to Content repository
 		
 		ContentAPI content = ContentFactory.getContent();
-		String content_view = content.getContent(key, locale);
+		String content_view = content.getContent(key, locale,site);
 		
 		if (content_view == null) content_view = "";		
 		request.setAttribute("content_view", content_view);		
@@ -108,6 +114,8 @@ public class MinimalCMS extends GenericPortlet {
 	
 		_log.debug("ACTION");
 		
+		site = this.getSite(request);
+		
 		// Accesing form params
 		
 		String edit_view = request.getParameter("edit_view");		
@@ -140,8 +148,31 @@ public class MinimalCMS extends GenericPortlet {
 		// Accessing to Content repository
 		
 		ContentAPI content = ContentFactory.getContent();
-		content.setContent(key, locale, edit_view);		
+		content.setContent(key, locale, edit_view,site);		
 				
 	}
 
+	// Methods for getting site
+	
+		private String getSite (RenderRequest request) {
+			for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet())
+		      {
+		    	  
+		    	 if (entry.getKey().equals("site_name"))
+		    		 site=entry.getValue()[0];
+		      }
+			System.out.println("site minimalcms render:"+site);
+			return site;
+		}
+		private String getSite (ActionRequest request) {
+			for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet())
+		      {
+		    	  
+		    	 if (entry.getKey().equals("site_name"))
+		    		 site=entry.getValue()[0];
+		      }
+			System.out.println("site minimalcms action:"+site);
+			return site;
+		}
+	
 }

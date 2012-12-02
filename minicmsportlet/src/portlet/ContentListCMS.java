@@ -1,7 +1,9 @@
 package portlet;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
+import java.util.Map;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -20,6 +22,8 @@ import content.ContentFactory;
 public class ContentListCMS extends GenericPortlet {
 
 	protected final static Logger _log = Logger.getLogger(ContentListCMS.class);
+	private String site;
+	
 
 	@Override
 	protected void doView(RenderRequest request, RenderResponse response)
@@ -27,12 +31,18 @@ public class ContentListCMS extends GenericPortlet {
 
 		_log.debug("VIEW");
 		
+		
+		
+	     site = this.getSite(request);
+		
+		
 		// Access Content repository
 		
 		ContentAPI content = ContentFactory.getContent();
-		List<Content> list = content.getContent();
+		List<Content> list = content.getContent(site);
 		
 		request.setAttribute("listcontent", list);
+		request.setAttribute("site", site);
 
 		// Accessing to Portlet session
 		
@@ -55,6 +65,8 @@ public class ContentListCMS extends GenericPortlet {
 
 		_log.debug("ACTION");	
 		
+		site = this.getSite(request);
+		
 		// Validation messages
 		String validation = "";
 		
@@ -63,7 +75,7 @@ public class ContentListCMS extends GenericPortlet {
 		
 		if (deletecontent != null) {
 			ContentAPI content = ContentFactory.getContent();
-			content.removeContent(deletecontent, deletelocale);			
+			content.removeContent(deletecontent, deletelocale, site);			
 			return;
 		}
 		
@@ -71,4 +83,26 @@ public class ContentListCMS extends GenericPortlet {
 		request.getPortletSession().setAttribute("validation", validation);					
 	}
 
+	// Methods for getting site
+	
+	private String getSite (RenderRequest request) {
+		for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet())
+	      {
+	    	  
+	    	 if (entry.getKey().equals("site_name"))
+	    		 site=entry.getValue()[0];
+	      }
+		System.out.println("site content render:"+site);
+		return site;
+	}
+	private String getSite (ActionRequest request) {
+		for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet())
+	      {
+	    	  
+	    	 if (entry.getKey().equals("site_name"))
+	    		 site=entry.getValue()[0];
+	      }
+		System.out.println("site content action:"+site);
+		return site;
+	}
 }

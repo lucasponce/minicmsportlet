@@ -28,7 +28,7 @@ public class CacheImagesImpl implements ImagesAPI {
 	public Image getImage(String key) {
 		checkCache();
 		if (imagesCache != null) {
-			String fqnstr = "/images/" + key;
+			String fqnstr = "/defaultsite/images/" + key;
 			Fqn fqn = Fqn.fromString(fqnstr);
 			Image image = (Image)imagesCache.get(fqn, key);
 			return image;
@@ -40,7 +40,7 @@ public class CacheImagesImpl implements ImagesAPI {
 	public void setImage(String key, FileItem file) {
 		checkCache();
 		if (imagesCache != null) {
-			String fqnstr = "/images/" + key;
+			String fqnstr = "/defaultsite/images/" + key;
 			Fqn fqn = Fqn.fromString(fqnstr);
 			Image image = convert(file);
 			imagesCache.put(fqn, key, image);								
@@ -51,7 +51,7 @@ public class CacheImagesImpl implements ImagesAPI {
 	public void removeImage(String key) {
 		checkCache();
 		if (imagesCache != null) {
-			String fqnstr = "/images/" + key;
+			String fqnstr = "/defaultsite/images/" + key;
 			Fqn fqn = Fqn.fromString(fqnstr);
 			imagesCache.remove(fqn, key);	
 			imagesCache.removeNode(fqn);
@@ -62,10 +62,57 @@ public class CacheImagesImpl implements ImagesAPI {
 	public Set<String> getImages() {
 		checkCache();
 		if (imagesCache != null) {
-			return imagesCache.getChildrenNames("/images");
+			return imagesCache.getChildrenNames("/defaultsite/images");
 		}
 		return null;
 	}
+	
+	// methods for managing site
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Image getImage(String key,String site) {
+		checkCache();
+		if (imagesCache != null) {
+			String fqnstr = "/"+site+"/images/" + key;
+			Fqn fqn = Fqn.fromString(fqnstr);
+			Image image = (Image)imagesCache.get(fqn, key);
+			return image;
+		}
+		return null;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void setImage(String key, FileItem file, String site) {
+		checkCache();
+		if (imagesCache != null) {
+			String fqnstr = "/"+site+"/images/" + key;
+			Fqn fqn = Fqn.fromString(fqnstr);
+			Image image = convert(file);
+			imagesCache.put(fqn, key, image);								
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void removeImage(String key, String site) {
+		checkCache();
+		if (imagesCache != null) {
+			String fqnstr = "/"+site+"/images/" + key;
+			Fqn fqn = Fqn.fromString(fqnstr);
+			imagesCache.remove(fqn, key);	
+			imagesCache.removeNode(fqn);
+		}		
+	}
+
+	@SuppressWarnings("unchecked")
+	public Set<String> getImages(String site) {
+		checkCache();
+		if (imagesCache != null) {
+			return imagesCache.getChildrenNames("/"+site+"/images");
+		}
+		return null;
+	}
+	
+	// end methods for managing sites
 	
 	@SuppressWarnings("rawtypes")
 	private void checkCache()  {
